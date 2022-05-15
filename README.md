@@ -1,4 +1,4 @@
-# NUWA
+# NUWA iOS
 
 This is the repository for the official iOS App for NUWA.
 
