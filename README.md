@@ -1,3 +1,11 @@
+# NUWA
+
+This is the repository for the official iOS App for NUWA.
+
+- Metaverse version of self-hosted, globally interconnected microblogging community
+
+Following are adapted from Mastodon:
+
 # Mastodon
 [![CI](https://github.com/mastodon/mastodon-ios/actions/workflows/main.yml/badge.svg)](https://github.com/mastodon/mastodon-ios/actions/workflows/main.yml) [![Crowdin](https://badges.crowdin.net/mastodon-for-ios/localized.svg)](https://crowdin.com/project/mastodon-for-ios)
 
