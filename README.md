@@ -4,21 +4,17 @@ This is the repository for the official iOS App for [NuwaSocial.com](nuwasocial.
 
 - Metaverse version of self-hosted, globally interconnected microblogging community
 
-Following are adapted from Mastodon:
 
-# Mastodon
-
-[![CI](https://github.com/mastodon/mastodon-ios/actions/workflows/main.yml/badge.svg)](https://github.com/mastodon/mastodon-ios/actions/workflows/main.yml) [![Crowdin](https://badges.crowdin.net/mastodon-for-ios/localized.svg)](https://crowdin.com/project/mastodon-for-ios)
-
-
-<a href="https://apps.apple.com/us/app/mastodon-for-iphone/id1571998974?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-top-left-radius: 13px; border-top-right-radius: 13px; border-bottom-right-radius: 13px; border-bottom-left-radius: 13px; width: 250px; height: 83px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1627603200&h=72b0c8495c2c0af1291efef280c4c2c1" alt="Download on the App Store" style="border-top-left-radius: 13px; border-top-right-radius: 13px; border-bottom-right-radius: 13px; border-bottom-left-radius: 13px; width: 250px; height: 83px;"></a>
-
+NUWA :-)
+<br />
+  
 ## Introduction
 
-This is the repository for the official iOS App for Mastodon. You can install it from the App Store now. You can build the app from source and file bug report here. 
+This is the repository for the official iOS App for NuwaSocial. You can install it from the App Store soon. You can build the app from source and file bug report here. 
 
-Read this blog post for this app to learn more. 
-> [Developing an official iOS app for Mastodon](https://blog.joinmastodon.org/2021/02/developing-an-official-ios-app-for-mastodon/)
+Read Mastodon github and blog post for Mastodon app to learn more. 
+> [Developing an official iOS app for Mastodon](https://blog.joinmastodon.org/2021/02/developing-an-official-ios-app-for-mastodon/)  
+> Original [Mastodon iOS](https://github.com/mastodon/mastodon-ios/) materials.
 
 ## Getting Started
 
