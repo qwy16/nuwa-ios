@@ -1,6 +1,6 @@
-# NUWA iOS
+# NuwaSocial iOS
 
-This is the repository for the official iOS App for NUWA.
+This is the repository for the official iOS App for [NuwaSocial.com](nuwasocial.com).
 
 - Metaverse version of self-hosted, globally interconnected microblogging community
 
