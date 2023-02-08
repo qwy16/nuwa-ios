@@ -21,8 +21,10 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>org.joinmastodon.app</string>
+			<string>com.nuwasocial.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>mastodon</string>
@@ -90,7 +92,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>NewPostShortcutItemTitle</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>org.joinmastodon.app.new-post</string>
+			<string>com.nuwasocial.app.new-post</string>
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconSymbolName</key>
@@ -98,7 +100,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>SearchShortcutItemTitle</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>org.joinmastodon.app.search</string>
+			<string>com.nuwasocial.app.search</string>
 		</dict>
 	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

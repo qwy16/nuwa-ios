@@ -3855,14 +3855,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "Mastodon/Resources/Preview\\ Assets.xcassets";
-				DEVELOPMENT_TEAM = 5Z4GVSS33P;
+				DEVELOPMENT_TEAM = 2F3E73M8TT;
 				INFOPLIST_FILE = Mastodon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.4.7;
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mastodon/Vender/Mastodon-Bridging-Header.h";
@@ -3884,14 +3884,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "Mastodon/Resources/Preview\\ Assets.xcassets";
-				DEVELOPMENT_TEAM = 5Z4GVSS33P;
+				DEVELOPMENT_TEAM = 2F3E73M8TT;
 				INFOPLIST_FILE = Mastodon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.4.7;
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mastodon/Vender/Mastodon-Bridging-Header.h";
@@ -3914,7 +3914,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.MastodonTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.MastodonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3935,7 +3935,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.MastodonTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.MastodonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3955,7 +3955,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.MastodonUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.MastodonUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3975,7 +3975,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.MastodonUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.MastodonUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4057,14 +4057,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "Mastodon/Resources/Preview\\ Assets.xcassets";
-				DEVELOPMENT_TEAM = 5Z4GVSS33P;
+				DEVELOPMENT_TEAM = 2F3E73M8TT;
 				INFOPLIST_FILE = Mastodon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.4.7;
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mastodon/Vender/Mastodon-Bridging-Header.h";
@@ -4088,7 +4088,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.MastodonTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.MastodonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4108,7 +4108,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.MastodonUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.MastodonUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4129,7 +4129,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -4150,7 +4150,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.ShareActionExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.ShareActionExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_EXTENSION $(inherited)";
@@ -4165,14 +4165,14 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MastodonIntent/MastodonIntent.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5Z4GVSS33P;
+				DEVELOPMENT_TEAM = 2F3E73M8TT;
 				INFOPLIST_FILE = MastodonIntent/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.MastodonIntent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.MastodonIntent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_EXTENSION $(inherited)";
@@ -4187,14 +4187,14 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MastodonIntent/MastodonIntent.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5Z4GVSS33P;
+				DEVELOPMENT_TEAM = 2F3E73M8TT;
 				INFOPLIST_FILE = MastodonIntent/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.MastodonIntent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.MastodonIntent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_EXTENSION $(inherited)";
@@ -4209,14 +4209,14 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MastodonIntent/MastodonIntent.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5Z4GVSS33P;
+				DEVELOPMENT_TEAM = 2F3E73M8TT;
 				INFOPLIST_FILE = MastodonIntent/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.MastodonIntent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.MastodonIntent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_EXTENSION $(inherited)";
@@ -4238,7 +4238,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.ShareActionExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.ShareActionExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_EXTENSION $(inherited)";
@@ -4260,7 +4260,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.ShareActionExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.ShareActionExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_EXTENSION $(inherited)";
@@ -4340,14 +4340,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "Mastodon/Resources/Preview\\ Assets.xcassets";
-				DEVELOPMENT_TEAM = 5Z4GVSS33P;
+				DEVELOPMENT_TEAM = 2F3E73M8TT;
 				INFOPLIST_FILE = Mastodon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.4.7;
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mastodon/Vender/Mastodon-Bridging-Header.h";
@@ -4370,7 +4370,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.MastodonTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.MastodonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4390,7 +4390,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.MastodonUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.MastodonUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4411,7 +4411,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -4432,7 +4432,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.ShareActionExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.ShareActionExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_EXTENSION $(inherited)";
@@ -4447,14 +4447,14 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MastodonIntent/MastodonIntent.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5Z4GVSS33P;
+				DEVELOPMENT_TEAM = 2F3E73M8TT;
 				INFOPLIST_FILE = MastodonIntent/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.MastodonIntent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.MastodonIntent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APP_EXTENSION $(inherited)";
@@ -4477,7 +4477,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -4499,7 +4499,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.joinmastodon.app.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nuwasocial.app.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
