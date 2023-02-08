@@ -11,6 +11,8 @@ import os.log
 import ThirdPartyMailer
 import UIKit
 import MastodonAsset
+import MastodonCore
+import MastodonUI
 import MastodonLocalization
 
 final class MastodonConfirmEmailViewController: UIViewController, NeedsDependency {
@@ -36,7 +38,7 @@ final class MastodonConfirmEmailViewController: UIViewController, NeedsDependenc
         let label = UILabel()
         label.font = UIFontMetrics(forTextStyle: .title1).scaledFont(for: UIFont.systemFont(ofSize: 20))
         label.textColor = .secondaryLabel
-        label.text = L10n.Scene.ConfirmEmail.subtitle
+        label.text = L10n.Scene.ConfirmEmail.tapTheLinkWeEmailedToYouToVerifyYourAccount
         label.numberOfLines = 0
         return label
     }()
@@ -205,10 +207,10 @@ extension MastodonConfirmEmailViewController {
     }
 
     func showEmailAppAlert() {
-        let clients = ThirdPartyMailClient.clients()
+        let clients = ThirdPartyMailClient.clients
         let application = UIApplication.shared
         let availableClients = clients.filter { client -> Bool in
-            ThirdPartyMailer.application(application, isMailClientAvailable: client)
+            ThirdPartyMailer.isMailClientAvailable(client)
         }
         let alertController = UIAlertController(title: L10n.Scene.ConfirmEmail.OpenEmailApp.openEmailClient, message: nil, preferredStyle: .alert)
 
@@ -218,7 +220,7 @@ extension MastodonConfirmEmailViewController {
         alertController.addAction(alertAction)
         _ = availableClients.compactMap { client -> UIAlertAction in
             let alertAction = UIAlertAction(title: client.name, style: .default) { _ in
-                _ = ThirdPartyMailer.application(application, openMailClient: client)
+                _ = ThirdPartyMailer.open(client, completionHandler: nil)
             }
             alertController.addAction(alertAction)
             return alertAction
@@ -227,6 +229,11 @@ extension MastodonConfirmEmailViewController {
         alertController.addAction(cancelAction)
         self.coordinator.present(scene: .alertController(alertController: alertController), from: self, transition: .alertController(animated: true, completion: nil))
     }
+}
+
+// MARK: - PanPopableViewController
+extension MastodonConfirmEmailViewController: PanPopableViewController {
+    var isPanPopable: Bool { false }
 }
 
 // MARK: - OnboardingViewControllerAppearance

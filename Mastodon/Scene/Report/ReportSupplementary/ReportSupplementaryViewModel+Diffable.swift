@@ -15,8 +15,8 @@ import MastodonLocalization
 extension ReportSupplementaryViewModel {
     
     static let reportItemHeaderContext = ReportItem.HeaderContext(
-        primaryLabelText: L10n.Scene.Report.content2,
-        secondaryLabelText: L10n.Scene.Report.step2
+        primaryLabelText: L10n.Scene.Report.StepFour.isThereAnythingElseWeShouldKnow,
+        secondaryLabelText: L10n.Scene.Report.StepFour.step4Of4
     )
     
     func setupDiffableDataSource(
@@ -25,7 +25,7 @@ extension ReportSupplementaryViewModel {
         diffableDataSource = ReportSection.diffableDataSource(
             tableView: tableView,
             context: context,
-            configuration: ReportSection.Configuration()
+            configuration: ReportSection.Configuration(authContext: authContext)
         )
 
         var snapshot = NSDiffableDataSourceSnapshot<ReportSection, ReportItem>()

@@ -9,6 +9,7 @@ import os.log
 import UIKit
 import Combine
 import MastodonAsset
+import MastodonCore
 import MastodonLocalization
 
 final class WelcomeViewController: UIViewController, NeedsDependency {
@@ -50,7 +51,8 @@ final class WelcomeViewController: UIViewController, NeedsDependency {
     private(set) lazy var signUpButton: PrimaryActionButton = {
         let button = PrimaryActionButton()
         button.adjustsBackgroundImageWhenUserInterfaceStyleChanges = false
-        button.setTitle(L10n.Scene.Welcome.getStarted, for: .normal)
+        button.titleLabel?.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
+        button.setTitle(L10n.Common.Controls.Actions.signUp, for: .normal)
         let backgroundImageColor: UIColor = .white
         let backgroundImageHighlightedColor: UIColor = UIColor(white: 0.8, alpha: 1.0)
         button.setBackgroundImage(.placeholder(color: backgroundImageColor), for: .normal)
@@ -63,7 +65,7 @@ final class WelcomeViewController: UIViewController, NeedsDependency {
     private(set) lazy var signInButton: PrimaryActionButton = {
         let button = PrimaryActionButton()
         button.adjustsBackgroundImageWhenUserInterfaceStyleChanges = false
-        button.titleLabel?.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 15, weight: .semibold))
+        button.titleLabel?.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         button.setTitle(L10n.Scene.Welcome.logIn, for: .normal)
         let backgroundImageColor = Asset.Scene.Welcome.signInButtonBackground.color
         let backgroundImageHighlightedColor = Asset.Scene.Welcome.signInButtonBackground.color.withAlphaComponent(0.8)
@@ -142,7 +144,7 @@ extension WelcomeViewController {
         signUpButton.addTarget(self, action: #selector(signUpButtonDidClicked(_:)), for: .touchUpInside)
         signInButton.addTarget(self, action: #selector(signInButtonDidClicked(_:)), for: .touchUpInside)
         
-        viewModel.needsShowDismissEntry
+        viewModel.$needsShowDismissEntry
             .receive(on: DispatchQueue.main)
             .sink { [weak self] needsShowDismissEntry in
                 guard let self = self else { return }
@@ -241,7 +243,7 @@ extension WelcomeViewController {
                 logoImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
                 logoImageView.leadingAnchor.constraint(equalTo: view.readableContentGuide.leadingAnchor, constant: 35),
                 view.readableContentGuide.trailingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 35),
-                logoImageView.heightAnchor.constraint(equalTo: logoImageView.widthAnchor, multiplier: 65.4/265.1),
+                logoImageView.heightAnchor.constraint(equalTo: logoImageView.widthAnchor, multiplier: 75.0/269.0),
             ])
             logoImageView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         }
@@ -315,12 +317,12 @@ extension WelcomeViewController {
 extension WelcomeViewController {
     @objc
     private func signUpButtonDidClicked(_ sender: UIButton) {
-        coordinator.present(scene: .mastodonPickServer(viewMode: MastodonPickServerViewModel(context: context, mode: .signUp)), from: self, transition: .show)
+        _ = coordinator.present(scene: .mastodonPickServer(viewMode: MastodonPickServerViewModel(context: context)), from: self, transition: .show)
     }
     
     @objc
     private func signInButtonDidClicked(_ sender: UIButton) {
-        coordinator.present(scene: .mastodonPickServer(viewMode: MastodonPickServerViewModel(context: context, mode: .signIn)), from: self, transition: .show)
+        _ = coordinator.present(scene: .mastodonLogin, from: self, transition: .show)
     }
     
     @objc

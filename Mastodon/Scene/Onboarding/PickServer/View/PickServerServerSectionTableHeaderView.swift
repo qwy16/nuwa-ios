@@ -9,6 +9,7 @@ import os.log
 import UIKit
 import Tabman
 import MastodonAsset
+import MastodonUI
 import MastodonLocalization
 
 protocol PickServerServerSectionTableHeaderViewDelegate: AnyObject {
@@ -18,7 +19,7 @@ protocol PickServerServerSectionTableHeaderViewDelegate: AnyObject {
 
 final class PickServerServerSectionTableHeaderView: UIView {
     
-    static let collectionViewHeight: CGFloat = 88
+    static let collectionViewHeight: CGFloat = 30
     static let searchTextFieldHeight: CGFloat = 38
     static let spacing: CGFloat = 11
     
@@ -96,11 +97,13 @@ final class PickServerServerSectionTableHeaderView: UIView {
         textField.tintColor = Asset.Colors.Label.primary.color
         textField.textColor = Asset.Colors.Label.primary.color
         textField.adjustsFontForContentSizeCategory = true
-        textField.attributedPlaceholder =
-            NSAttributedString(
-                string: L10n.Scene.ServerPicker.Input.placeholder,
-                attributes: [.font: UIFont.systemFont(ofSize: 15, weight: .regular),
-                             .foregroundColor: Asset.Colors.Label.secondary.color.withAlphaComponent(0.6)])
+        textField.attributedPlaceholder = NSAttributedString(
+            string: L10n.Scene.ServerPicker.Input.searchServersOrEnterUrl,
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 15, weight: .regular),
+                .foregroundColor: Asset.Colors.Label.secondary.color.withAlphaComponent(0.6)
+            ]
+        )
         textField.clearButtonMode = .whileEditing
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
@@ -174,7 +177,6 @@ extension PickServerServerSectionTableHeaderView {
 extension PickServerServerSectionTableHeaderView: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        os_log(.info, log: .debug, "%{public}s[%{public}ld], %{public}s: indexPath: %s", ((#file as NSString).lastPathComponent), #line, #function, indexPath.debugDescription)
         collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         delegate?.pickServerServerSectionTableHeaderView(self, collectionView: collectionView, didSelectItemAt: indexPath)
     }
@@ -202,5 +204,5 @@ extension PickServerServerSectionTableHeaderView: UITextFieldDelegate {
         textField.resignFirstResponder()
         return false
     }
-    
+
 }

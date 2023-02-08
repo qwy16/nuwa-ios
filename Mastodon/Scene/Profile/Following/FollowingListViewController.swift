@@ -9,6 +9,9 @@ import os.log
 import UIKit
 import GameplayKit
 import Combine
+import MastodonLocalization
+import MastodonCore
+import MastodonUI
 
 final class FollowingListViewController: UIViewController, NeedsDependency {
 
@@ -42,6 +45,8 @@ extension FollowingListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = L10n.Scene.Following.title
+            
         view.backgroundColor = ThemeService.shared.currentTheme.value.secondarySystemBackgroundColor
         ThemeService.shared.currentTheme
             .receive(on: DispatchQueue.main)
@@ -78,17 +83,28 @@ extension FollowingListViewController {
         
         // trigger user timeline loading
         Publishers.CombineLatest(
-            viewModel.domain.removeDuplicates().eraseToAnyPublisher(),
-            viewModel.userID.removeDuplicates().eraseToAnyPublisher()
+            viewModel.$domain.removeDuplicates(),
+            viewModel.$userID.removeDuplicates()
         )
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                self.viewModel.stateMachine.enter(FollowingListViewModel.State.Reloading.self)
-            }
-            .store(in: &disposeBag)
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel.stateMachine.enter(FollowingListViewModel.State.Reloading.self)
+        }
+        .store(in: &disposeBag)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.deselectRow(with: transitionCoordinator, animated: animated)
+    }
+    
+}
+
+// MARK: - AuthContextProvider
+extension FollowingListViewController: AuthContextProvider {
+    var authContext: AuthContext { viewModel.authContext }
 }
 
 // MARK: - UITableViewDelegate

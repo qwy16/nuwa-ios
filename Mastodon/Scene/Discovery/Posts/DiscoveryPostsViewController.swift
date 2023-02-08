@@ -8,6 +8,7 @@
 import os.log
 import UIKit
 import Combine
+import MastodonCore
 import MastodonUI
 
 final class DiscoveryPostsViewController: UIViewController, NeedsDependency, MediaPreviewableViewController {
@@ -31,7 +32,7 @@ final class DiscoveryPostsViewController: UIViewController, NeedsDependency, Med
         return tableView
     }()
     
-    let refreshControl = UIRefreshControl()
+    let refreshControl = RefreshControl()
     
     let discoveryIntroBannerView = DiscoveryIntroBannerView()
 
@@ -118,13 +119,18 @@ extension DiscoveryPostsViewController {
 
 extension DiscoveryPostsViewController {
     
-    @objc private func refreshControlValueChanged(_ sender: UIRefreshControl) {
+    @objc private func refreshControlValueChanged(_ sender: RefreshControl) {
         guard viewModel.stateMachine.enter(DiscoveryPostsViewModel.State.Reloading.self) else {
             sender.endRefreshing()
             return
         }
     }
     
+}
+
+// MARK: - AuthContextProvider
+extension DiscoveryPostsViewController: AuthContextProvider {
+    var authContext: AuthContext { viewModel.authContext }
 }
 
 // MARK: - UITableViewDelegate
@@ -160,14 +166,29 @@ extension DiscoveryPostsViewController: StatusTableViewCellDelegate { }
 
 // MARK: ScrollViewContainer
 extension DiscoveryPostsViewController: ScrollViewContainer {
-    var scrollView: UIScrollView? {
-        tableView
-    }
+    var scrollView: UIScrollView { tableView }
 }
 
 // MARK: - DiscoveryIntroBannerViewDelegate
 extension DiscoveryPostsViewController: DiscoveryIntroBannerViewDelegate {
     func discoveryIntroBannerView(_ bannerView: DiscoveryIntroBannerView, closeButtonDidPressed button: UIButton) {
         UserDefaults.shared.discoveryIntroBannerNeedsHidden = true
+    }
+}
+
+extension DiscoveryPostsViewController {
+    override var keyCommands: [UIKeyCommand]? {
+        return navigationKeyCommands + statusNavigationKeyCommands
+    }
+}
+
+// MARK: - StatusTableViewControllerNavigateable
+extension DiscoveryPostsViewController: StatusTableViewControllerNavigateable {
+    @objc func navigateKeyCommandHandlerRelay(_ sender: UIKeyCommand) {
+        navigateKeyCommandHandler(sender)
+    }
+
+    @objc func statusKeyCommandHandlerRelay(_ sender: UIKeyCommand) {
+        statusKeyCommandHandler(sender)
     }
 }

@@ -13,14 +13,18 @@ import MastodonSDK
 import MastodonAsset
 import MastodonLocalization
 import MastodonExtension
+import MastodonCore
+import CoreData
+import CoreDataStack
 
 extension NotificationView {
     public final class ViewModel: ObservableObject {
         public var disposeBag = Set<AnyCancellable>()
+        public var objects = Set<NSManagedObject>()
 
-        let logger = Logger(subsystem: "StatusView", category: "ViewModel")
+        let logger = Logger(subsystem: "NotificationView", category: "ViewModel")
         
-        @Published public var userIdentifier: UserIdentifier?       // me
+        @Published public var authContext: AuthContext?
         
         @Published public var notificationIndicatorText: MetaContent?
 
@@ -35,11 +39,13 @@ extension NotificationView {
         
         @Published public var timestamp: Date?
         
+        @Published public var followRequestState = MastodonFollowRequestState(state: .none)
+        @Published public var transientFollowRequestState = MastodonFollowRequestState(state: .none)
+        
         let timestampUpdatePublisher = Timer.publish(every: 1.0, on: .main, in: .common)
             .autoconnect()
             .share()
             .eraseToAnyPublisher()
-        
     }
 }
 
@@ -47,12 +53,13 @@ extension NotificationView.ViewModel {
     func bind(notificationView: NotificationView) {
         bindAuthor(notificationView: notificationView)
         bindAuthorMenu(notificationView: notificationView)
+        bindFollowRequest(notificationView: notificationView)
         
-        $userIdentifier
-            .assign(to: \.userIdentifier, on: notificationView.statusView.viewModel)
+        $authContext
+            .assign(to: \.authContext, on: notificationView.statusView.viewModel)
             .store(in: &disposeBag)
-        $userIdentifier
-            .assign(to: \.userIdentifier, on: notificationView.quoteStatusView.viewModel)
+        $authContext
+            .assign(to: \.authContext, on: notificationView.quoteStatusView.viewModel)
             .store(in: &disposeBag)
     }
  
@@ -137,7 +144,8 @@ extension NotificationView.ViewModel {
                 name: name,
                 isMuting: isMuting,
                 isBlocking: isBlocking,
-                isMyself: isMyself
+                isMyself: isMyself,
+                isBookmarking: false    // no bookmark action display for notification item
             )
             notificationView.menuButton.menu = notificationView.setupAuthorMenu(menuContext: menuContext)
             notificationView.menuButton.showsMenuAsPrimaryAction = true
@@ -146,4 +154,58 @@ extension NotificationView.ViewModel {
         }
         .store(in: &disposeBag)
     }
+    
+    private func bindFollowRequest(notificationView: NotificationView) {
+        Publishers.CombineLatest(
+            $followRequestState,
+            $transientFollowRequestState
+        )
+        .sink { followRequestState, transientFollowRequestState in
+            switch followRequestState.state {
+            case .isAccept:
+                notificationView.rejectFollowRequestButtonShadowBackgroundContainer.isHidden = true
+                notificationView.acceptFollowRequestButton.isUserInteractionEnabled = false
+                notificationView.acceptFollowRequestButton.setImage(nil, for: .normal)
+                notificationView.acceptFollowRequestButton.setTitle(L10n.Scene.Notification.FollowRequest.accepted, for: .normal)
+            case .isReject:
+                notificationView.acceptFollowRequestButtonShadowBackgroundContainer.isHidden = true
+                notificationView.rejectFollowRequestButton.isUserInteractionEnabled = false
+                notificationView.rejectFollowRequestButton.setImage(nil, for: .normal)
+                notificationView.rejectFollowRequestButton.setTitle(L10n.Scene.Notification.FollowRequest.rejected, for: .normal)
+            default:
+                break
+            }
+            
+            let state = transientFollowRequestState.state
+            if state == .isAccepting {
+                notificationView.acceptFollowRequestActivityIndicatorView.startAnimating()
+                notificationView.acceptFollowRequestButton.tintColor = .clear
+                notificationView.acceptFollowRequestButton.setTitleColor(.clear, for: .normal)
+            } else {
+                notificationView.acceptFollowRequestActivityIndicatorView.stopAnimating()
+                notificationView.acceptFollowRequestButton.tintColor = .white
+                notificationView.acceptFollowRequestButton.setTitleColor(.white, for: .normal)
+            }
+            if state == .isRejecting {
+                notificationView.rejectFollowRequestActivityIndicatorView.startAnimating()
+                notificationView.rejectFollowRequestButton.tintColor = .clear
+                notificationView.rejectFollowRequestButton.setTitleColor(.clear, for: .normal)
+            } else {
+                notificationView.rejectFollowRequestActivityIndicatorView.stopAnimating()
+                notificationView.rejectFollowRequestButton.tintColor = .black
+                notificationView.rejectFollowRequestButton.setTitleColor(.black, for: .normal)
+            }
+            
+            UIView.animate(withDuration: 0.3) {
+                if state == .isAccept {
+                    notificationView.rejectFollowRequestButtonShadowBackgroundContainer.isHidden = true
+                }
+                if state == .isReject {
+                    notificationView.acceptFollowRequestButtonShadowBackgroundContainer.isHidden = true
+                }
+            }
+        }
+        .store(in: &disposeBag)
+    }
+    
 }

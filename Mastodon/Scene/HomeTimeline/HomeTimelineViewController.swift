@@ -16,8 +16,9 @@ import MastodonSDK
 import AlamofireImage
 import StoreKit
 import MastodonAsset
-import MastodonLocalization
+import MastodonCore
 import MastodonUI
+import MastodonLocalization
 
 final class HomeTimelineViewController: UIViewController, NeedsDependency, MediaPreviewableViewController {
     
@@ -27,7 +28,7 @@ final class HomeTimelineViewController: UIViewController, NeedsDependency, Media
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
     
     var disposeBag = Set<AnyCancellable>()
-    private(set) lazy var viewModel = HomeTimelineViewModel(context: context)
+    var viewModel: HomeTimelineViewModel!
     
     let mediaPreviewTransitionController = MediaPreviewTransitionController()
 
@@ -73,7 +74,7 @@ final class HomeTimelineViewController: UIViewController, NeedsDependency, Media
         return progressView
     }()
     
-    let refreshControl = UIRefreshControl()
+    let refreshControl = RefreshControl()
     
     deinit {
         os_log(.info, log: .debug, "%{public}s[%{public}ld], %{public}s:", ((#file as NSString).lastPathComponent), #line, #function)
@@ -164,6 +165,7 @@ extension HomeTimelineViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
+        // // layout publish progress
         publishProgressView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(publishProgressView)
         NSLayoutConstraint.activate([
@@ -203,10 +205,12 @@ extension HomeTimelineViewController {
             }
             .store(in: &disposeBag)
         
-        viewModel.homeTimelineNavigationBarTitleViewModel.publishingProgress
+        context.publisherService.$currentPublishProgress
             .receive(on: DispatchQueue.main)
             .sink { [weak self] progress in
                 guard let self = self else { return }
+                let progress = Float(progress)
+
                 guard progress > 0 else {
                     let dismissAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeInOut)
                     dismissAnimator.addAnimations {
@@ -339,7 +343,7 @@ extension HomeTimelineViewController {
             let button = HighlightDimmableButton()
             button.titleLabel?.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 15, weight: .semibold))
             button.setTitle(L10n.Common.Controls.Actions.manuallySearch, for: .normal)
-            button.setTitleColor(Asset.Colors.brandBlue.color, for: .normal)
+            button.setTitleColor(Asset.Colors.brand.color, for: .normal)
             button.addTarget(self, action: #selector(HomeTimelineViewController.manuallySearchButtonPressed(_:)), for: .touchUpInside)
             return button
         }()
@@ -372,9 +376,9 @@ extension HomeTimelineViewController {
 extension HomeTimelineViewController {
     
     @objc private func findPeopleButtonPressed(_ sender: PrimaryActionButton) {
-        let suggestionAccountViewModel = SuggestionAccountViewModel(context: context)
+        let suggestionAccountViewModel = SuggestionAccountViewModel(context: context, authContext: viewModel.authContext)
         suggestionAccountViewModel.delegate = viewModel
-        coordinator.present(
+        _ = coordinator.present(
             scene: .suggestionAccount(viewModel: suggestionAccountViewModel),
             from: self,
             transition: .modal(animated: true, completion: nil)
@@ -383,18 +387,18 @@ extension HomeTimelineViewController {
     
     @objc private func manuallySearchButtonPressed(_ sender: UIButton) {
         os_log(.info, log: .debug, "%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
-        let searchDetailViewModel = SearchDetailViewModel()
+        let searchDetailViewModel = SearchDetailViewModel(authContext: viewModel.authContext)
         coordinator.present(scene: .searchDetail(viewModel: searchDetailViewModel), from: self, transition: .modal(animated: true, completion: nil))
     }
     
     @objc private func settingBarButtonItemPressed(_ sender: UIBarButtonItem) {
         os_log(.info, log: .debug, "%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
         guard let setting = context.settingService.currentSetting.value else { return }
-        let settingsViewModel = SettingsViewModel(context: context, setting: setting)
+        let settingsViewModel = SettingsViewModel(context: context, authContext: viewModel.authContext, setting: setting)
         coordinator.present(scene: .settings(viewModel: settingsViewModel), from: self, transition: .modal(animated: true, completion: nil))
     }
 
-    @objc private func refreshControlValueChanged(_ sender: UIRefreshControl) {
+    @objc private func refreshControlValueChanged(_ sender: RefreshControl) {
         guard viewModel.loadLatestStateMachine.enter(HomeTimelineViewModel.LoadLatestState.Loading.self) else {
             sender.endRefreshing()
             return
@@ -402,14 +406,9 @@ extension HomeTimelineViewController {
     }
     
     @objc func signOutAction(_ sender: UIAction) {
-        guard let authenticationBox = context.authenticationService.activeMastodonAuthenticationBox.value else {
-            return
-        }
-
         Task { @MainActor in
-            try await context.authenticationService.signOutMastodonUser(authenticationBox: authenticationBox)
+            try await context.authenticationService.signOutMastodonUser(authenticationBox: viewModel.authContext.mastodonAuthenticationBox)
             self.coordinator.setup()
-            self.coordinator.setupOnboardingIfNeeds(animated: true)
         }
     }
 
@@ -492,6 +491,11 @@ extension HomeTimelineViewController {
     }
 }
 
+// MARK: - AuthContextProvider
+extension HomeTimelineViewController: AuthContextProvider {
+    var authContext: AuthContext { viewModel.authContext }
+}
+
 // MARK: - UITableViewDelegate
 extension HomeTimelineViewController: UITableViewDelegate, AutoGenerateTableViewDelegate {
     // sourcery:inline:HomeTimelineViewController.AutoGenerateTableViewDelegate
@@ -537,13 +541,9 @@ extension HomeTimelineViewController: TimelineMiddleLoaderTableViewCellDelegate 
 // MARK: - ScrollViewContainer
 extension HomeTimelineViewController: ScrollViewContainer {
     
-    var scrollView: UIScrollView? { return tableView }
+    var scrollView: UIScrollView { return tableView }
     
     func scrollToTop(animated: Bool) {
-        guard let scrollView = scrollView else {
-            return
-        }
-
         if scrollView.contentOffset.y < scrollView.frame.height,
            viewModel.loadLatestStateMachine.canEnterState(HomeTimelineViewModel.LoadLatestState.Loading.self),
            (scrollView.contentOffset.y + scrollView.adjustedContentInset.top) == 0.0,

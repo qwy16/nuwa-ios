@@ -9,6 +9,7 @@ import UIKit
 import Combine
 import FLAnimatedImage
 import MetaTextKit
+import MastodonCore
 import MastodonUI
 
 final class AccountListTableViewCell: UITableViewCell {
@@ -23,7 +24,6 @@ final class AccountListTableViewCell: UITableViewCell {
     let checkmarkImageView: UIImageView = {
         let image = UIImage(systemName: "checkmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold))
         let imageView = UIImageView(image: image)
-        imageView.tintColor = .label
         return imageView
     }()
     let separatorLine = UIView.separatorLine
@@ -69,6 +69,7 @@ extension AccountListTableViewCell {
         ])
         avatarButton.setContentHuggingPriority(.defaultLow, for: .horizontal)
         avatarButton.setContentHuggingPriority(.defaultLow, for: .vertical)
+        avatarButton.isAccessibilityElement = false
 
         let labelContainerStackView = UIStackView()
         labelContainerStackView.axis = .vertical
@@ -124,6 +125,8 @@ extension AccountListTableViewCell {
         
         badgeButton.setBadge(number: 0)
         checkmarkImageView.isHidden = true
+
+        accessibilityTraits.insert(.button)
     }
 
 }

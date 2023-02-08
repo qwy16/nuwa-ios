@@ -13,6 +13,8 @@ import AlamofireImage
 import CoreDataStack
 import MastodonLocalization
 import MastodonAsset
+import MastodonSDK
+import MastodonCore
 
 extension ProfileCardView {
     public class ViewModel: ObservableObject {
@@ -44,6 +46,8 @@ extension ProfileCardView {
         
         @Published public var groupedAccessibilityLabel = ""
         
+        @Published public var familiarFollowers: Mastodon.Entity.FamiliarFollowers?
+        
         init() {
             backgroundColor = ThemeService.shared.currentTheme.value.systemBackgroundColor
             Publishers.CombineLatest(
@@ -55,7 +59,12 @@ extension ProfileCardView {
                 guard let userInterfaceStyle = userInterfaceStyle else { return }
                 switch userInterfaceStyle {
                 case .dark:
-                    self.backgroundColor = theme.systemBackgroundColor
+                    switch theme.themeName {
+                    case .mastodon:
+                        self.backgroundColor = theme.systemBackgroundColor
+                    case .system:
+                        self.backgroundColor = theme.secondarySystemBackgroundColor
+                    }
                 case .light, .unspecified:
                     self.backgroundColor = Asset.Scene.Discovery.profileCardBackground.color
                 @unknown default:
@@ -77,6 +86,7 @@ extension ProfileCardView.ViewModel {
         bindBio(view: view)
         bindRelationship(view: view)
         bindDashboard(view: view)
+        bindFamiliarFollowers(view: view)
         bindAccessibility(view: view)
     }
     
@@ -95,7 +105,10 @@ extension ProfileCardView.ViewModel {
     private func bindHeader(view: ProfileCardView) {
         $authorBannerImageURL
             .sink { url in
-                guard let url = url else { return }
+                guard let url = url, !url.absoluteString.hasSuffix("missing.png") else {
+                    view.bannerImageView.image = .placeholder(color: .systemGray3)
+                    return
+                }
                 view.bannerImageView.af.setImage(
                     withURL: url,
                     placeholderImage: .placeholder(color: .systemGray3),
@@ -186,6 +199,18 @@ extension ProfileCardView.ViewModel {
                 view.statusDashboardView.followersDashboardMeterView.isAccessibilityElement = true
                 view.statusDashboardView.followersDashboardMeterView.accessibilityLabel = L10n.Plural.Count.follower(count ?? 0)
             }
+            .store(in: &disposeBag)
+    }
+    
+    private func bindFamiliarFollowers(view: ProfileCardView) {
+        $familiarFollowers
+            .sink { familiarFollowers in
+                view.familiarFollowersDashboardViewAdaptiveMarginContainerView.isHidden = familiarFollowers.flatMap { $0.accounts.isEmpty } ?? true
+                view.familiarFollowersDashboardView.configure(familiarFollowers: familiarFollowers)
+            }
+            .store(in: &disposeBag)
+        $backgroundColor
+            .assign(to: \.backgroundColor, on: view.familiarFollowersDashboardView.viewModel)
             .store(in: &disposeBag)
     }
     

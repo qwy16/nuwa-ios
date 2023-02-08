@@ -11,6 +11,7 @@ import Combine
 import FLAnimatedImage
 import MetaTextKit
 import MastodonAsset
+import MastodonCore
 import MastodonLocalization
 import MastodonUI
 
@@ -37,9 +38,18 @@ final class ProfileHeaderView: UIView {
     
     weak var delegate: ProfileHeaderViewDelegate?
     var disposeBag = Set<AnyCancellable>()
+    private var _disposeBag = Set<AnyCancellable>()
+
+    func prepareForReuse() {
+        disposeBag.removeAll()
+    }
     
-    var state: State?
-    
+    private(set) lazy var viewModel: ViewModel = {
+        let viewModel = ViewModel()
+        viewModel.bind(view: self)
+        return viewModel
+    }()
+        
     let bannerContainerView = UIView()
     let bannerImageView: UIImageView = {
         let imageView = UIImageView()
@@ -61,6 +71,18 @@ final class ProfileHeaderView: UIView {
         overlayView.backgroundColor = ProfileHeaderView.bannerImageViewOverlayViewBackgroundNormalColor
         return overlayView
     }()
+    var bannerImageViewTopLayoutConstraint: NSLayoutConstraint!
+    var bannerImageViewBottomLayoutConstraint: NSLayoutConstraint!
+    
+    let followsYouBlurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+    let followsYouVibrantEffectView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: UIBlurEffect(style: .regular), style: .label))
+    let followsYouLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.text = L10n.Scene.Profile.Header.followsYou
+        return label
+    }()
+    let followsYouMaskView = UIView()
 
     let avatarImageViewBackgroundView: UIView = {
         let view = UIView()
@@ -81,7 +103,7 @@ final class ProfileHeaderView: UIView {
 
     func setupAvatarOverlayViews() {
         editAvatarBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        editAvatarButton.tintColor = .white
+        editAvatarButtonOverlayIndicatorView.tintColor = .white
     }
 
     static let avatarImageViewOverlayBlurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
@@ -101,7 +123,7 @@ final class ProfileHeaderView: UIView {
         return view
     }()
     
-    let editAvatarButton: HighlightDimmableButton = {
+    let editAvatarButtonOverlayIndicatorView: HighlightDimmableButton = {
         let button = HighlightDimmableButton()
         button.setImage(UIImage(systemName: "photo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 28)), for: .normal)
         button.tintColor = .clear
@@ -136,7 +158,7 @@ final class ProfileHeaderView: UIView {
     let nameTextField: UITextField = {
         let textField = UITextField()
         textField.font = UIFontMetrics(forTextStyle: .title2).scaledFont(for: .systemFont(ofSize: 22, weight: .bold))
-        textField.textColor = Asset.Colors.Label.secondary.color
+        textField.textColor = Asset.Colors.Label.primary.color
         textField.text = "Alice"
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
@@ -163,9 +185,6 @@ final class ProfileHeaderView: UIView {
         button.titleLabel?.minimumScaleFactor = 0.5
         return button
     }()
-    
-    let bioContainerView = UIView()
-    let fieldContainerStackView = UIStackView()
 
     let bioMetaText: MetaText = {
         let metaText = MetaText()
@@ -194,7 +213,7 @@ final class ProfileHeaderView: UIView {
         ]
         metaText.linkAttributes = [
             .font: UIFont.preferredFont(forTextStyle: .body),
-            .foregroundColor: Asset.Colors.brandBlue.color,
+            .foregroundColor: Asset.Colors.brand.color,
         ]
         return metaText
     }()
@@ -220,7 +239,7 @@ extension ProfileHeaderView {
                 guard let self = self else { return }
                 self.backgroundColor = theme.systemBackgroundColor
             }
-            .store(in: &disposeBag)
+            .store(in: &_disposeBag)
         
         // banner
         bannerContainerView.translatesAutoresizingMaskIntoConstraints = false
@@ -230,12 +249,19 @@ extension ProfileHeaderView {
             bannerContainerView.topAnchor.constraint(equalTo: topAnchor),
             bannerContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             trailingAnchor.constraint(equalTo: bannerContainerView.trailingAnchor),
-            readableContentGuide.widthAnchor.constraint(equalTo: bannerContainerView.heightAnchor, multiplier: 3),  // set height to 1/3 of readable frame width
+            bannerContainerView.widthAnchor.constraint(equalTo: bannerContainerView.heightAnchor, multiplier: 3),   // aspectRatio 1 : 3
         ])
         
-        bannerImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        bannerImageView.frame = bannerContainerView.bounds
+        bannerImageView.translatesAutoresizingMaskIntoConstraints = false
         bannerContainerView.addSubview(bannerImageView)
+        bannerImageViewTopLayoutConstraint = bannerImageView.topAnchor.constraint(equalTo: bannerContainerView.topAnchor)
+        bannerImageViewBottomLayoutConstraint = bannerContainerView.bottomAnchor.constraint(equalTo: bannerImageView.bottomAnchor)
+        NSLayoutConstraint.activate([
+            bannerImageViewTopLayoutConstraint,
+            bannerImageView.leadingAnchor.constraint(equalTo: bannerContainerView.leadingAnchor),
+            bannerImageView.trailingAnchor.constraint(equalTo: bannerContainerView.trailingAnchor),
+            bannerImageViewBottomLayoutConstraint,
+        ])
         
         bannerImageViewOverlayVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
         bannerImageView.addSubview(bannerImageViewOverlayVisualEffectView)
@@ -245,7 +271,41 @@ extension ProfileHeaderView {
             bannerImageViewOverlayVisualEffectView.trailingAnchor.constraint(equalTo: bannerImageView.trailingAnchor),
             bannerImageViewOverlayVisualEffectView.bottomAnchor.constraint(equalTo: bannerImageView.bottomAnchor),
         ])
+        
+        // follows you
+        followsYouBlurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(followsYouBlurEffectView)
+        NSLayoutConstraint.activate([
+            layoutMarginsGuide.trailingAnchor.constraint(equalTo: followsYouBlurEffectView.trailingAnchor),
+            bannerContainerView.bottomAnchor.constraint(equalTo: followsYouBlurEffectView.bottomAnchor, constant: 16),
+        ])
+        followsYouBlurEffectView.layer.masksToBounds = true
+        followsYouBlurEffectView.layer.cornerRadius = 8
+        followsYouBlurEffectView.layer.cornerCurve = .continuous
+        followsYouBlurEffectView.isHidden = true
 
+        followsYouVibrantEffectView.translatesAutoresizingMaskIntoConstraints = false
+        followsYouBlurEffectView.contentView.addSubview(followsYouVibrantEffectView)
+        NSLayoutConstraint.activate([
+            followsYouVibrantEffectView.topAnchor.constraint(equalTo: followsYouBlurEffectView.topAnchor),
+            followsYouVibrantEffectView.leadingAnchor.constraint(equalTo: followsYouBlurEffectView.leadingAnchor),
+            followsYouVibrantEffectView.trailingAnchor.constraint(equalTo: followsYouBlurEffectView.trailingAnchor),
+            followsYouVibrantEffectView.bottomAnchor.constraint(equalTo: followsYouBlurEffectView.bottomAnchor),
+        ])
+        
+        followsYouLabel.translatesAutoresizingMaskIntoConstraints = false
+        followsYouVibrantEffectView.contentView.addSubview(followsYouLabel)
+        NSLayoutConstraint.activate([
+            followsYouLabel.topAnchor.constraint(equalTo: followsYouVibrantEffectView.topAnchor, constant: 4),
+            followsYouLabel.leadingAnchor.constraint(equalTo: followsYouVibrantEffectView.leadingAnchor, constant: 6),
+            followsYouVibrantEffectView.trailingAnchor.constraint(equalTo: followsYouLabel.trailingAnchor, constant: 6),
+            followsYouVibrantEffectView.bottomAnchor.constraint(equalTo: followsYouLabel.bottomAnchor, constant: 4),
+        ])
+        
+        followsYouMaskView.frame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
+        followsYouMaskView.backgroundColor = .red
+        followsYouBlurEffectView.mask = followsYouMaskView
+        
         // avatar
         avatarImageViewBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(avatarImageViewBackgroundView)
@@ -283,13 +343,13 @@ extension ProfileHeaderView {
             editAvatarBackgroundView.bottomAnchor.constraint(equalTo: avatarButton.bottomAnchor),
         ])
         
-        editAvatarButton.translatesAutoresizingMaskIntoConstraints = false
-        editAvatarBackgroundView.addSubview(editAvatarButton)
+        editAvatarButtonOverlayIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        editAvatarBackgroundView.addSubview(editAvatarButtonOverlayIndicatorView)
         NSLayoutConstraint.activate([
-            editAvatarButton.topAnchor.constraint(equalTo: editAvatarBackgroundView.topAnchor),
-            editAvatarButton.leadingAnchor.constraint(equalTo: editAvatarBackgroundView.leadingAnchor),
-            editAvatarButton.trailingAnchor.constraint(equalTo: editAvatarBackgroundView.trailingAnchor),
-            editAvatarButton.bottomAnchor.constraint(equalTo: editAvatarBackgroundView.bottomAnchor),
+            editAvatarButtonOverlayIndicatorView.topAnchor.constraint(equalTo: editAvatarBackgroundView.topAnchor),
+            editAvatarButtonOverlayIndicatorView.leadingAnchor.constraint(equalTo: editAvatarBackgroundView.leadingAnchor),
+            editAvatarButtonOverlayIndicatorView.trailingAnchor.constraint(equalTo: editAvatarBackgroundView.trailingAnchor),
+            editAvatarButtonOverlayIndicatorView.bottomAnchor.constraint(equalTo: editAvatarBackgroundView.bottomAnchor),
         ])
         editAvatarBackgroundView.isUserInteractionEnabled = true
         avatarButton.isUserInteractionEnabled = true
@@ -297,6 +357,7 @@ extension ProfileHeaderView {
         // container: V - [ dashboard container | author container | bio ]
         let container = UIStackView()
         container.axis = .vertical
+        container.distribution = .fill
         container.spacing = 8
         container.preservesSuperviewLayoutMargins = true
         container.isLayoutMarginsRelativeArrangement = true
@@ -310,7 +371,7 @@ extension ProfileHeaderView {
             layoutMarginsGuide.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             container.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
-        
+                
         // dashboardContainer: H - [ padding | statusDashboardView ]
         let dashboardContainer = UIStackView()
         dashboardContainer.axis = .horizontal
@@ -364,6 +425,7 @@ extension ProfileHeaderView {
             nameTextFieldBackgroundView.trailingAnchor.constraint(equalTo: nameMetaText.textView.trailingAnchor, constant: 5),
             nameMetaText.textView.bottomAnchor.constraint(equalTo: nameTextFieldBackgroundView.bottomAnchor),
         ])
+        // nameMetaText.textView.setContentHuggingPriority(, for: <#T##NSLayoutConstraint.Axis#>)
         
         nameContainerStackView.addArrangedSubview(displayNameStackView)
         nameContainerStackView.addArrangedSubview(usernameLabel)
@@ -387,6 +449,7 @@ extension ProfileHeaderView {
         container.addArrangedSubview(bioMetaText.textView)
     
         bringSubviewToFront(bannerContainerView)
+        bringSubviewToFront(followsYouBlurEffectView)
         bringSubviewToFront(avatarImageViewBackgroundView)
         
         statusDashboardView.delegate = self
@@ -407,8 +470,14 @@ extension ProfileHeaderView {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
-        updateLayoutMargins()
+
+        // workaround enter background breaking the layout issue
+        switch UIApplication.shared.applicationState {
+        case .active:
+            updateLayoutMargins()
+        default:
+            break
+        }
     }
 
 }
@@ -430,53 +499,6 @@ extension ProfileHeaderView {
         layoutMargins.right = margin
     }
     
-}
-
-extension ProfileHeaderView {
-    enum State {
-        case normal
-        case editing
-    }
-    
-    func configure(state: State) {
-        guard self.state != state else { return }   // avoid redundant animation
-        self.state = state
-        
-        let animator = UIViewPropertyAnimator(duration: 0.33, curve: .easeInOut)
-        
-        switch state {
-        case .normal:
-            nameMetaText.textView.alpha = 1
-            nameTextField.alpha = 0
-            nameTextField.isEnabled = false
-            bioMetaText.textView.backgroundColor = .clear
-
-            animator.addAnimations {
-                self.bannerImageViewOverlayVisualEffectView.backgroundColor = ProfileHeaderView.bannerImageViewOverlayViewBackgroundNormalColor
-                self.nameTextFieldBackgroundView.backgroundColor = .clear
-                self.editAvatarBackgroundView.alpha = 0
-            }
-            animator.addCompletion { _ in
-                self.editAvatarBackgroundView.isHidden = true
-            }
-        case .editing:
-            nameMetaText.textView.alpha = 0
-            nameTextField.isEnabled = true
-            nameTextField.alpha = 1
-            
-            editAvatarBackgroundView.isHidden = false
-            editAvatarBackgroundView.alpha = 0
-            bioMetaText.textView.backgroundColor = .clear
-            animator.addAnimations {
-                self.bannerImageViewOverlayVisualEffectView.backgroundColor = ProfileHeaderView.bannerImageViewOverlayViewBackgroundEditingColor
-                self.nameTextFieldBackgroundView.backgroundColor = Asset.Scene.Profile.Banner.nameEditBackgroundGray.color
-                self.editAvatarBackgroundView.alpha = 1
-                self.bioMetaText.textView.backgroundColor = Asset.Scene.Profile.Banner.bioEditBackgroundGray.color
-            }
-        }
-        
-        animator.startAnimation()
-    }
 }
 
 extension ProfileHeaderView {

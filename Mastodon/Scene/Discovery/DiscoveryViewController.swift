@@ -9,7 +9,9 @@ import os.log
 import UIKit
 import Combine
 import Tabman
+import Pageboy
 import MastodonAsset
+import MastodonCore
 import MastodonUI
 
 public class DiscoveryViewController: TabmanViewController, NeedsDependency {
@@ -23,11 +25,8 @@ public class DiscoveryViewController: TabmanViewController, NeedsDependency {
     
     weak var context: AppContext! { willSet { precondition(!isViewLoaded) } }
     weak var coordinator: SceneCoordinator! { willSet { precondition(!isViewLoaded) } }
-    
-    private(set) lazy var viewModel = DiscoveryViewModel(
-        context: context,
-        coordinator: coordinator
-    )
+        
+    var viewModel: DiscoveryViewModel!
     
     private(set) lazy var buttonBar: TMBar.ButtonBar = {
         let buttonBar = TMBar.ButtonBar()
@@ -123,6 +122,41 @@ extension DiscoveryViewController {
     private func setupAppearance(theme: Theme) {
         view.backgroundColor = theme.secondarySystemBackgroundColor
         buttonBarBackgroundView.backgroundColor = theme.systemBackgroundColor
+    }
+    
+}
+
+// MARK: - ScrollViewContainer
+extension DiscoveryViewController: ScrollViewContainer {
+    var scrollView: UIScrollView {
+        return (currentViewController as? ScrollViewContainer)?.scrollView ?? UIScrollView()
+    }
+    func scrollToTop(animated: Bool) {
+        if scrollView.contentOffset.y <= 0 {
+            scrollToPage(.first, animated: animated)
+        } else {
+            scrollView.scrollToTop(animated: animated)
+        }
+    }
+}
+
+extension DiscoveryViewController {
+
+    public override var keyCommands: [UIKeyCommand]? {
+        return pageboyNavigateKeyCommands
+    }
+
+}
+
+// MARK: - PageboyNavigateable
+extension DiscoveryViewController: PageboyNavigateable {
+    
+    var navigateablePageViewController: PageboyViewController {
+        return self
+    }
+    
+    @objc func pageboyNavigateKeyCommandHandlerRelay(_ sender: UIKeyCommand) {
+        pageboyNavigateKeyCommandHandler(sender)
     }
     
 }

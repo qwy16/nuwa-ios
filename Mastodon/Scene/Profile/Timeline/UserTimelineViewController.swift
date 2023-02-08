@@ -11,6 +11,9 @@ import AVKit
 import Combine
 import CoreDataStack
 import GameplayKit
+import TabBarPager
+import XLPagerTabStrip
+import MastodonCore
 
 final class UserTimelineViewController: UIViewController, NeedsDependency, MediaPreviewableViewController {
     
@@ -100,6 +103,11 @@ extension UserTimelineViewController: CellFrameCacheContainer {
     }
 }
 
+// MARK: - AuthContextProvider
+extension UserTimelineViewController: AuthContextProvider {
+    var authContext: AuthContext { viewModel.authContext }
+}
+
 // MARK: - UITableViewDelegate
 extension UserTimelineViewController: UITableViewDelegate, AutoGenerateTableViewDelegate {
     // sourcery:inline:UserTimelineViewController.AutoGenerateTableViewDelegate
@@ -143,7 +151,14 @@ extension UserTimelineViewController: UITableViewDelegate, AutoGenerateTableView
 
 // MARK: - CustomScrollViewContainerController
 extension UserTimelineViewController: ScrollViewContainer {
-    var scrollView: UIScrollView? { return tableView }
+    var scrollView: UIScrollView { return tableView }
+}
+
+// MARK: - TabBarPage
+extension UserTimelineViewController: TabBarPage {
+    var pageScrollView: UIScrollView {
+        scrollView
+    }
 }
 
 // MARK: - StatusTableViewCellDelegate
@@ -163,5 +178,12 @@ extension UserTimelineViewController: StatusTableViewControllerNavigateable {
     
     @objc func statusKeyCommandHandlerRelay(_ sender: UIKeyCommand) {
         statusKeyCommandHandler(sender)
+    }
+}
+
+// MARK: - IndicatorInfoProvider
+extension UserTimelineViewController: IndicatorInfoProvider {
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        return IndicatorInfo(title: viewModel.title)
     }
 }

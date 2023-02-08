@@ -7,12 +7,12 @@
 
 import UIKit
 
-// Make status bar style adaptive for child view controller
-// SeeAlso: `modalPresentationCapturesStatusBarAppearance`
 class AdaptiveStatusBarStyleNavigationController: UINavigationController {
 
     private lazy var fullWidthBackGestureRecognizer = UIPanGestureRecognizer()
 
+    // Make status bar style adaptive for child view controller
+    // SeeAlso: `modalPresentationCapturesStatusBarAppearance`
     override var childForStatusBarStyle: UIViewController? {
         visibleViewController
     }
@@ -23,6 +23,7 @@ extension AdaptiveStatusBarStyleNavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupFullWidthBackGesture()
     }
 
@@ -45,6 +46,11 @@ extension AdaptiveStatusBarStyleNavigationController: UIGestureRecognizerDelegat
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let isSystemSwipeToBackEnabled = interactivePopGestureRecognizer?.isEnabled == true
         let isThereStackedViewControllers = viewControllers.count > 1
-        return isSystemSwipeToBackEnabled && isThereStackedViewControllers
+        let isPanPopable = (topViewController as? PanPopableViewController)?.isPanPopable ?? true
+        return isSystemSwipeToBackEnabled && isThereStackedViewControllers && isPanPopable
     }
+}
+
+protocol PanPopableViewController: UIViewController {
+    var isPanPopable: Bool { get }
 }

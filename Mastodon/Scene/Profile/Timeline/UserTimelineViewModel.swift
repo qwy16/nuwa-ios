@@ -12,6 +12,7 @@ import Combine
 import CoreData
 import CoreDataStack
 import MastodonSDK
+import MastodonCore
 
 final class UserTimelineViewModel {
     
@@ -19,17 +20,19 @@ final class UserTimelineViewModel {
 
     // input
     let context: AppContext
-    @Published var domain: String?
-    @Published var userID: String?
-    @Published var queryFilter: QueryFilter
+    let authContext: AuthContext
+    let title: String
     let statusFetchedResultsController: StatusFetchedResultsController
     let listBatchFetchViewModel = ListBatchFetchViewModel()
+    @Published var userIdentifier: UserIdentifier?
+    @Published var queryFilter: QueryFilter
 
-    let isBlocking = CurrentValueSubject<Bool, Never>(false)
-    let isBlockedBy = CurrentValueSubject<Bool, Never>(false)
-    let isSuspended = CurrentValueSubject<Bool, Never>(false)
-    let userDisplayName = CurrentValueSubject<String?, Never>(nil)  // for suspended prompt label
-    var dataSourceDidUpdate = PassthroughSubject<Void, Never>()
+    @Published var isBlocking = false
+    @Published var isBlockedBy = false
+    @Published var isSuspended = false
+
+    // let userDisplayName = CurrentValueSubject<String?, Never>(nil)  // for suspended prompt label
+    // var dataSourceDidUpdate = PassthroughSubject<Void, Never>()
 
     // output
     var diffableDataSource: UITableViewDiffableDataSource<StatusSection, StatusItem>?
@@ -48,30 +51,23 @@ final class UserTimelineViewModel {
 
     init(
         context: AppContext,
-        domain: String?,
-        userID: String?,
+        authContext: AuthContext,
+        title: String,
         queryFilter: QueryFilter
     ) {
         self.context = context
+        self.authContext = authContext
+        self.title = title
         self.statusFetchedResultsController = StatusFetchedResultsController(
             managedObjectContext: context.managedObjectContext,
-            domain: domain,
-            additionalTweetPredicate: Status.notDeleted()
+            domain: authContext.mastodonAuthenticationBox.domain,
+            additionalTweetPredicate: nil
         )
-        self.domain = domain
-        self.userID = userID
         self.queryFilter = queryFilter
-        // super.init()
-
-        $domain
-            .assign(to: \.value, on: statusFetchedResultsController.domain)
-            .store(in: &disposeBag)
-        
-        
     }
 
     deinit {
-        os_log("%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
+        os_log(.info, log: .debug, "%{public}s[%{public}ld], %{public}s", ((#file as NSString).lastPathComponent), #line, #function)
     }
 
 }
@@ -92,5 +88,4 @@ extension UserTimelineViewModel {
             self.onlyMedia = onlyMedia
         }
     }
-
 }

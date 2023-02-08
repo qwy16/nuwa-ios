@@ -10,6 +10,8 @@ import UIKit
 import Combine
 import Pageboy
 import MastodonAsset
+import MastodonCore
+import MastodonUI
 import MastodonLocalization
 
 final class MediaPreviewViewController: UIViewController, NeedsDependency {
@@ -135,6 +137,18 @@ extension MediaPreviewViewController {
                 }
             }
             .store(in: &disposeBag)
+        
+//        viewModel.$isPoping
+//            .receive(on: DispatchQueue.main)
+//            .removeDuplicates()
+//            .sink { [weak self] _ in
+//                guard let self = self else { return }
+//                // statusBar style update with animation
+//                self.setNeedsStatusBarAppearanceUpdate()
+//                UIView.animate(withDuration: 0.3) {
+//                }
+//            }
+//            .store(in: &disposeBag)
     }
     
 }

@@ -19,7 +19,9 @@ extension DiscoveryForYouViewModel {
             tableView: tableView,
             context: context,
             configuration: DiscoverySection.Configuration(
-                profileCardTableViewCellDelegate: profileCardTableViewCellDelegate
+                authContext: authContext,
+                profileCardTableViewCellDelegate: profileCardTableViewCellDelegate,
+                familiarFollowers: $familiarFollowers
             )
         )
         
