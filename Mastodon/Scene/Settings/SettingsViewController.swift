@@ -208,7 +208,7 @@ extension SettingsViewController {
             }
             .store(in: &disposeBag)
 
-        let footer = "Mastodon for iOS v\(UIApplication.appVersion()) (\(UIApplication.appBuild()))"
+        let footer = "NuwaSocial for iOS v\(UIApplication.appVersion()) (\(UIApplication.appBuild()))"
         let metaContent = PlaintextMetaContent(string: footer)
         tableFooterLabel.configure(content: metaContent)
     }
@@ -374,7 +374,7 @@ extension SettingsViewController: UITableViewDelegate {
                 guard let url = URL(string: "https://\(domain)/auth/edit") else { return }
                 viewModel.openAuthenticationPage(authenticateURL: url, presentationContextProvider: self)
             case .github:
-                guard let url = URL(string: "https://github.com/mastodon/mastodon-ios") else { break }
+                guard let url = URL(string: "https://github.com/qwy16/nuwa-ios") else { break }
                 _ = coordinator.present(
                     scene: .safari(url: url),
                     from: self,

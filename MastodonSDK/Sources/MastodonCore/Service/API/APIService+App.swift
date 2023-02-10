@@ -16,10 +16,10 @@ extension APIService {
     #if DEBUG
     private static let clientName = "Skimming"
     #else
-    private static let clientName = "Mastodon for iOS"
+    private static let clientName = "NuwaSocial for iOS"
     #endif
 
-    private static let appWebsite = "https://app.joinmastodon.org/ios"
+    private static let appWebsite = "https://nuwasocial.com/ios"
 
     public func createApplication(domain: String) -> AnyPublisher<Mastodon.Response.Content<Mastodon.Entity.Application>, Error> {
         let query = Mastodon.API.App.CreateQuery(
