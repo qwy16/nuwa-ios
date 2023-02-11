@@ -18,20 +18,21 @@ final class WelcomeIllustrationView: UIView {
     let leftHillImageView = UIImageView()
     let centerHillImageView = UIImageView()
     
-    private let cloudBaseImage = Asset.Scene.Welcome.Illustration.cloudBase.image
+ /*   private let cloudBaseImage = Asset.Scene.Welcome.Illustration.cloudBase.image
     private let cloudBaseExtendImage = Asset.Scene.Welcome.Illustration.cloudBaseExtend.image
     private let elephantThreeOnGrassWithTreeTwoImage = Asset.Scene.Welcome.Illustration.elephantThreeOnGrassWithTreeTwo.image
     private let elephantThreeOnGrassWithTreeThreeImage = Asset.Scene.Welcome.Illustration.elephantThreeOnGrassWithTreeThree.image
+ */
     private let elephantThreeOnGrassImage = Asset.Scene.Welcome.Illustration.elephantThreeOnGrass.image
     private let elephantThreeOnGrassExtendImage = Asset.Scene.Welcome.Illustration.elephantThreeOnGrassExtend.image
     
     // layout outside
-    let elephantOnAirplaneWithContrailImageView: UIImageView = {
+ /*   let elephantOnAirplaneWithContrailImageView: UIImageView = {
         let imageView = UIImageView(image: Asset.Scene.Welcome.Illustration.elephantOnAirplaneWithContrail.image)
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-    
+ */
     var layout: Layout = .compact {
         didSet {
             setNeedsLayout()
@@ -127,16 +128,16 @@ extension WelcomeIllustrationView {
         let size = layout.artworkImageSize
         let width = size.width
         let height = size.height
-        
+   
         cloudBaseImageView.image = UIGraphicsImageRenderer(size: size).image { context in
             // clear background
             UIColor.clear.setFill()
             context.fill(CGRect(origin: .zero, size: size))
 
             // draw cloud
-            cloudBaseImage.draw(at: CGPoint(x: 0, y: height - cloudBaseImage.size.height))
+         //   cloudBaseImage.draw(at: CGPoint(x: 0, y: height - cloudBaseImage.size.height))
         }
-
+  /*
         rightHillImageView.image = UIGraphicsImageRenderer(size: size).image { context in
             // clear background
             UIColor.clear.setFill()
@@ -144,7 +145,7 @@ extension WelcomeIllustrationView {
 
             // draw elephantThreeOnGrassWithTreeTwoImage
             // elephantThreeOnGrassWithTreeTwo.bottomY - 25 align to elephantThreeOnGrassImage.centerY
-            elephantThreeOnGrassWithTreeTwoImage.draw(at: CGPoint(x: width - elephantThreeOnGrassWithTreeTwoImage.size.width, y: height - 0.5 * elephantThreeOnGrassImage.size.height - elephantThreeOnGrassWithTreeTwoImage.size.height + 25))
+            //elephantThreeOnGrassWithTreeTwoImage.draw(at: CGPoint(x: width - elephantThreeOnGrassWithTreeTwoImage.size.width, y: height - 0.5 * elephantThreeOnGrassImage.size.height - elephantThreeOnGrassWithTreeTwoImage.size.height + 25))
         }
 
         leftHillImageView.image = UIGraphicsImageRenderer(size: size).image { context in
@@ -154,9 +155,9 @@ extension WelcomeIllustrationView {
 
             // draw elephantThreeOnGrassWithTreeThree
             // elephantThreeOnGrassWithTreeThree.bottomY + 30 align to elephantThreeOnGrassImage.centerY
-            elephantThreeOnGrassWithTreeThreeImage.draw(at: CGPoint(x: 0, y: height - 0.5 * elephantThreeOnGrassImage.size.height - elephantThreeOnGrassWithTreeThreeImage.size.height - 30))
+            //elephantThreeOnGrassWithTreeThreeImage.draw(at: CGPoint(x: 0, y: height - 0.5 * elephantThreeOnGrassImage.size.height - elephantThreeOnGrassWithTreeThreeImage.size.height - 30))
         }
-
+   */
         centerHillImageView.image = UIGraphicsImageRenderer(size: size).image { context in
             // clear background
             UIColor.clear.setFill()
@@ -178,7 +179,7 @@ extension WelcomeIllustrationView {
             context.fill(CGRect(origin: .zero, size: size))
 
             // draw cloud
-            cloudBaseExtendImage.draw(at: CGPoint(x: 0, y: height - cloudBaseExtendImage.size.height))
+          //  cloudBaseExtendImage.draw(at: CGPoint(x: 0, y: height - cloudBaseExtendImage.size.height))
             
             rightHillImageView.image = UIGraphicsImageRenderer(size: size).image { context in
                 // clear background
@@ -187,7 +188,7 @@ extension WelcomeIllustrationView {
 
                 // draw elephantThreeOnGrassWithTreeTwoImage
                 // elephantThreeOnGrassWithTreeTwo.bottomY - 25 align to elephantThreeOnGrassImage.centerY
-                elephantThreeOnGrassWithTreeTwoImage.draw(at: CGPoint(x: width - elephantThreeOnGrassWithTreeTwoImage.size.width, y: height - 0.5 * elephantThreeOnGrassImage.size.height - elephantThreeOnGrassWithTreeTwoImage.size.height - 20))
+               // elephantThreeOnGrassWithTreeTwoImage.draw(at: CGPoint(x: width - elephantThreeOnGrassWithTreeTwoImage.size.width, y: height - 0.5 * elephantThreeOnGrassImage.size.height - elephantThreeOnGrassWithTreeTwoImage.size.height - 20))
             }
             
             leftHillImageView.image = UIGraphicsImageRenderer(size: size).image { context in
@@ -197,7 +198,7 @@ extension WelcomeIllustrationView {
 
                 // draw elephantThreeOnGrassWithTreeThree
                 // elephantThreeOnGrassWithTreeThree.bottomY + 30 align to elephantThreeOnGrassImage.centerY
-                elephantThreeOnGrassWithTreeThreeImage.draw(at: CGPoint(x: -160, y: height - 0.5 * elephantThreeOnGrassImage.size.height - elephantThreeOnGrassWithTreeThreeImage.size.height - 80))
+               // elephantThreeOnGrassWithTreeThreeImage.draw(at: CGPoint(x: -160, y: height - 0.5 * elephantThreeOnGrassImage.size.height - elephantThreeOnGrassWithTreeThreeImage.size.height - 80))
             }
             
             centerHillImageView.image = UIGraphicsImageRenderer(size: size).image { context in

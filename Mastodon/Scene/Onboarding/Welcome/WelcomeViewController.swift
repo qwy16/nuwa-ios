@@ -243,7 +243,8 @@ extension WelcomeViewController {
                 logoImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
                 logoImageView.leadingAnchor.constraint(equalTo: view.readableContentGuide.leadingAnchor, constant: 35),
                 view.readableContentGuide.trailingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 35),
-                logoImageView.heightAnchor.constraint(equalTo: logoImageView.widthAnchor, multiplier: 75.0/269.0),
+                //logoImageView.heightAnchor.constraint(equalTo: logoImageView.widthAnchor, multiplier: 75.0/269.0),
+                logoImageView.heightAnchor.constraint(equalTo: logoImageView.widthAnchor, multiplier: 42.0/68.0),
             ])
             logoImageView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         }
@@ -285,7 +286,7 @@ extension WelcomeViewController {
             topPaddingView.leadingAnchor.constraint(equalTo: logoImageView.leadingAnchor),
             topPaddingView.trailingAnchor.constraint(equalTo: logoImageView.trailingAnchor),
         ])
-        welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.translatesAutoresizingMaskIntoConstraints = false
+   /*     welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(welcomeIllustrationView.elephantOnAirplaneWithContrailImageView)
         NSLayoutConstraint.activate([
             view.leftAnchor.constraint(equalTo: welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.leftAnchor, constant: 12),  // add 12pt bleeding
@@ -294,20 +295,21 @@ extension WelcomeViewController {
             welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.84),
             welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.heightAnchor.constraint(equalTo: welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.widthAnchor, multiplier: 105.0/318.0),
         ])
+    */
         let bottomPaddingView = UIView()
         bottomPaddingView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(bottomPaddingView)
         NSLayoutConstraint.activate([
-            bottomPaddingView.topAnchor.constraint(equalTo: welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.bottomAnchor),
+     //       bottomPaddingView.topAnchor.constraint(equalTo: welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.bottomAnchor),
             bottomPaddingView.leadingAnchor.constraint(equalTo: logoImageView.leadingAnchor),
             bottomPaddingView.trailingAnchor.constraint(equalTo: logoImageView.trailingAnchor),
             bottomPaddingView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             bottomPaddingView.heightAnchor.constraint(equalTo: topPaddingView.heightAnchor, multiplier: 4),
         ])
         
-        welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.addMotionEffect(
-            UIInterpolatingMotionEffect.motionEffect(minX: -20, maxX: 12, minY: -20, maxY: 12)  // maxX should not larger then the bleeding (12pt)
-        )
+      //  welcomeIllustrationView.elephantOnAirplaneWithContrailImageView.addMotionEffect(
+      //      UIInterpolatingMotionEffect.motionEffect(minX: -20, maxX: 12, minY: -20, maxY: 12)  // maxX should not larger then the bleeding (12pt)
+      //  )
         
         view.bringSubviewToFront(logoImageView)
         view.bringSubviewToFront(sloganLabel)
